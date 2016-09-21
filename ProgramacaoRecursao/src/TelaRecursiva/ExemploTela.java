@@ -5,7 +5,7 @@ public class ExemploTela {
 		
 		Tela tela = new Tela();
 		tela.mudaCor(100, 0, 0);
-		tela.limpar();
+		tela.limpar(tela.getCanvasWidth(),tela.getCanvasHeight());
 		FractalQuadros.fazQuadro(tela);
 
 //		tela.desenhaLinha(0, 0, 100, 100);

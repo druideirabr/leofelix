@@ -88,9 +88,9 @@ public class Tela extends JFrame {
 		this.osg.setColor(drawingColor);
 	}
 	
-	public void limpar() {
+	public void limpar(int width, int heigth) {
 		this.osg.setColor(this.drawingColor);
-		this.osg.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+		this.osg.fillRect(0, 0, width,heigth);
 		this.repaint();		
 	}
 
