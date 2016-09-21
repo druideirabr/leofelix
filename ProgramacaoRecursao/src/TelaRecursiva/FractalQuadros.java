@@ -7,7 +7,7 @@ public class FractalQuadros {
 		fazQuadro(a, 0, 0, a.getCanvasWidth(), a.getCanvasHeight());
 	}
 	private static void fazQuadro(Tela a, int dHoriz, int dVert, int x2, int y2) {
-		if (x2 <= a.getCanvasWidth()/16){
+		if (x2 < a.getCanvasWidth()/16 && x2 >= a.getCanvasWidth()/32){
 			a.getOsg().fillRect(dHoriz+x2/2+1, dVert+1, x2/2-1, y2/2-1);
 			a.getOsg().fillRect(dHoriz+1, dVert+y2/2+1, x2/2-1, y2/2-1);
 		}
