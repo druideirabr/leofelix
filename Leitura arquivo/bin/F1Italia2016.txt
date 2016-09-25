@@ -1,0 +1,23 @@
+No#Driver#Team#Laps#Time/Retired#Pts
+5#Sebastian Vettel#FERRARI#53#+20.990s#15
+12#Felipe Nasr#SAUBER FERRARI#6#DNF#0
+26#Daniil Kvyat#TORO ROSSO FERRARI#36#DNF#0
+94#Pascal Wehrlein#MRT MERCEDES#26#DNF#0
+3#Daniel Ricciardo#RED BULL RACING TAG HEUER#53#+45.295s#10
+77#Valtteri Bottas#WILLIAMS MERCEDES#53#+51.015s#8
+19#Felipe Massa#WILLIAMS MERCEDES#53#+65.617s#2
+27#Nico Hulkenberg#FORCE INDIA MERCEDES#53#+78.656s#1
+7#Kimi Räikkönen#FERRARI#53#+27.561s#12
+8#Romain Grosjean#HAAS FERRARI#52#+1 lap#0
+22#Jenson Button#MCLAREN HONDA#52#+1 lap#0
+6#Nico Rosberg#MERCEDES#53#1:17:28.089#25
+21#Esteban Gutierrez#HAAS FERRARI#52#+1 lap#0
+14#Fernando Alonso#MCLAREN HONDA#52#+1 lap#0
+33#Max Verstappen#RED BULL RACING TAG HEUER#53#+54.236s#6
+55#Carlos Sainz#TORO ROSSO FERRARI#52#+1 lap#0
+9#Marcus Ericsson#SAUBER FERRARI#52#+1 lap#0
+20#Kevin Magnussen#RENAULT#52#+1 lap#0
+31#Esteban Ocon#MRT MERCEDES#51#+2 laps#0
+44#Lewis Hamilton#MERCEDES#53#+15.070s#18
+11#Sergio Perez#FORCE INDIA MERCEDES#53#+64.954s#4
+30#Jolyon Palmer#RENAULT#7#DNF#0
