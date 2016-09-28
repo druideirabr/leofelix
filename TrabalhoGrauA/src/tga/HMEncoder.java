@@ -1,7 +1,7 @@
 package tga;
 
 import java.io.*;
-
+//interface original provida nas especificações do programa, não alteradas.
 interface HMEncoder {
 	/**
 	 * Retorna o nome do arquivo base atualmente em uso.

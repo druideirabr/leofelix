@@ -1,0 +1,18 @@
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+<<<<<<< HEAD
+/bin/
+
+src/1.jpg
+=======
+>>>>>>> parent of 4f03fb4... Dei uma atualizada no código. dá uma olhada. se tiver qualquer duvida me

@@ -3,31 +3,46 @@ package tga;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Codificador implements HMEncoder {
 
-	public String[][] arrayPalavras;
+	public ArrayList<IndexedWord> indiceReverso = new ArrayList<IndexedWord>();
 
-	public void load(File baseText) { // no metodo de getbaseText
-		// cria um arrayList e vai adicionando as linhas na lista conforme vai
-		// lendo;
-
-		ArrayList<String[]> arrayListPalavras = new ArrayList<String[]>();
+	public void load(File baseText) {
+		// declaraçao do que é usado no método
 		String linha;
 		BufferedReader in = null;
+		String[] arrayDaLinha;
+		// variável temporaria para
+		IndexedWord palavraComIndex;
 		try {
+			// cria o leitor
 			in = new BufferedReader(new FileReader(baseText));
-			// começa a ler o arquivo
+			int j = 0;
+			// enquanto nao chega no fim da arquivo , continua lendo
 			while ((linha = in.readLine()) != null) {
-				// adiciona no arrayList de arrays de Strings
-				arrayListPalavras.add(linha.split(" "));
+				int i = 0;
+				// divide o arquivo e cria um array de Strings da String
+				// correspondente à linha
+				arrayDaLinha = linha.split(" ");
+				while (i < arrayDaLinha.length) {
+					// enquanto não terminar esse array, vai adicionando no
+					// indiceReverso
+					// j = 0 (primeira linha). Adiciona todoos da çrimeira linha
+					// com seus respectivos valores
+					palavraComIndex = new IndexedWord(arrayDaLinha[i], j, i++);
+					indiceReverso.add(palavraComIndex);
+				}
+				j++;
 			}
-			// converte do arrayList de array de strings para um array
-			// bidimensional
-			arrayPalavras = (String[][]) arrayListPalavras.toArray();
-			SortArray2D(arrayPalavras);
-
-		} catch (IOException e) {// mudar pra metodo mais especifico
+			// sorteia o arrayList, usando a classe Comparador, que implementa
+			// Comparator.
+			Collections.sort(indiceReverso, new Comparador());
+			// captura as checked exceptions
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
@@ -39,80 +54,106 @@ public class Codificador implements HMEncoder {
 					e.printStackTrace();
 				}
 		}
-
 	}
 
 	@Override
 	public File getBaseText() {
-		// TODO Auto-generated method stub
-		return null;
+		// declaração do file
+		File file = null;
+		// declaração do JFileChooser que acessa os diretórios do sistema
+		// operacional
+		JFileChooser chooser = new JFileChooser();
+		// filtro para aceitar apenas arquivos de texto
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivo Texto", "txt", "rtf");
+		chooser.setFileFilter(filter);
+		// elimina a opção de escolher "Todos os arquivos", para não dar erro no
+		// tempo de execução,
+		// caso o usuario selecione um arquivo errado
+		chooser.setAcceptAllFileFilterUsed(false);
+		boolean ativo = true;
+		// enquanto estiver ativo, ou seja, o programa não for fechado ou outro
+		// arquivo escolhido, continua
+		// pedindo entrada de dados.
+		while (ativo) {
+			int returnVal = chooser.showOpenDialog(null);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				// se achar um arquivo válido, adiciona ao file;
+				file = chooser.getSelectedFile().getAbsoluteFile();
+				if (file.exists())
+					ativo = false;
+			} else {
+				// confirmação de saída do programa
+				int resposta = JOptionPane.showConfirmDialog(null, "Deseja Sair do Programa?");
+				if (resposta == JOptionPane.YES_OPTION) {
+					System.exit(0);
+				} else
+					ativo = true;
+
+			}
+		}
+		// retorna o arquivo, caso o arquivo selecionado seja válido.
+		return file;
 	}
 
 	@Override
 	public IndexedWord lookup(String word) {
-		// se a palavra n for um espaço ou nula, chama o método privado de
-		// procurar pela palavra
-
-		return lookup(word, 0, arrayPalavras.length, 0, 0);
-
+		// chama o método privado
+		return lookup(word, 0, indiceReverso.size());
 	}
 
-	private IndexedWord lookup(String word, int inf, int sup, int infLinha, int supLinha) {
-		//não utilizei o método padrão de pesquisa binária pq como eu extrai o array de um
-		//arraylist, então o tamanho das colunas nao é padrão, vai depender do tamanho da frase.
-		int med = (sup + inf) / 2;
-		int medLinha = (supLinha + infLinha) / 2;
-		//vai procurar no primeiro elemento das linhas
-		// se o elemento requisitado vier depois do elemento [med][0], o inf vai ser acrescentado.
-		//o método sempre olha a próxima linha pra ver se já não está na linha certa
-		if (arrayPalavras[med][0].compareToIgnoreCase(word) < 0
-				&& arrayPalavras[med + 1][0].compareToIgnoreCase(word) < 0) {
-			lookup(word, (inf = med + 1), sup, infLinha, supLinha);
-			// se o elemento requisitado vier antes da linha que o med está, o sup vai ser decrescido
-		} else if (arrayPalavras[med][0].compareToIgnoreCase(word) > 0) {
-			lookup(word, inf, sup = med - 1, infLinha, supLinha);
-		}
-		//se o primeiro elemento da linha em que procuro for menor do que o elemento que o procuro
-		//e o primeiro elemento da próxima linha for maior, isso significa que o med está na linha certa
-		// então mantém se o med e se começa a procurar na linha
-		if (arrayPalavras[med][0].compareToIgnoreCase(word) < 0
-				&& arrayPalavras[med + 1][0].compareToIgnoreCase(word) > 0) {
-			supLinha = arrayPalavras[med].length;
-			//agora segue o mesmo padrão de pesquisa binaria, porém dentro da linha
-			if (arrayPalavras[med][medLinha].compareToIgnoreCase(word) < 0) {
-				lookup(word, inf, sup, infLinha = medLinha + 1, supLinha);
-			} else if (arrayPalavras[med][medLinha].compareToIgnoreCase(word) > 0) {
-				lookup(word, inf, sup, infLinha, supLinha = medLinha - 1);
+	private IndexedWord lookup(String word, int inf, int sup) {
+		// pesquisa binária simples
+		int med = (inf + sup) / 2;
+		if (inf <= sup && med < indiceReverso.size() - 1) {
+			// se achar a palavra retorna o a IndexedWord correspondente dela.
+			if (indiceReverso.get(med).getPalavra().compareTo(word) == 0)
+				return indiceReverso.get(med);
+			// se a palavra vier depois, aumenta o inf;
+			else if (indiceReverso.get(med).getPalavra().compareTo(word) < 0) {
+				return lookup(word, inf = med + 1, sup);
+				// se vier antes , diminui o sup;
+			} else if (indiceReverso.get(med).getPalavra().compareTo(word) > 0) {
+				return lookup(word, inf, sup = med - 1);
 			}
 		}
-		return new IndexedWord (word, med, medLinha);
+		// se não tiver, retorna nulo.
+		return null;
+
 	}
 
 	@Override
-	public int[][] encode(String message) {
-		// TODO Auto-generated method stub
-		return null;
+	public int[][] encode(String message) throws HMEncodingException {
+		// divide a mensagem recebida em um string de palavras
+		String[] mensagem = message.split(" ");
+		// cria uma matriz com os indices
+		int[][] retornoMatrizInt = null;
+		// cria uma matriz de N x 2, de acordo com especificações do programa
+		retornoMatrizInt = new int[mensagem.length][2];
+		for (int i = 0; i < retornoMatrizInt.length; i++) {
+			// se a mensagem for nula, lança uma exception. Vale ressaltar que o
+			// programa não
+			// conta espaços como Exceptions, espaços são caracteres válidos.
+			if (lookup(mensagem[i]) == null) {
+				throw new HMEncodingException();
+			}
+			// preenche a matriz N x 2 com os respectivos valores de linha e
+			// coluna.
+			// poderia ser feito com [i] e [j], porem daria mais trabalho, para
+			// o mesmo propósito.
+			// nesse caso ,por se tratar de uma matriz pequna, resolvi optar por
+			// valores constantes.
+			retornoMatrizInt[i][0] = lookup(mensagem[i]).getLinha() + 1;
+			retornoMatrizInt[i][1] = lookup(mensagem[i]).getColuna() + 1;
+		}
+		// retorna a matriz gerada.
+		return retornoMatrizInt;
 	}
 
-	private static void SortArray2D(String[][] a) {
-		// cria um ArrayList
-		ArrayList<String> ordenaTemp = new ArrayList<String>();
-		// transforma o array bidimensional de strings em um arraylist de
-		// strings.
-		for (int i = 0; i < a.length; i++) {
-			for (int j = 0; i < a[i].length; i++) {
-				ordenaTemp.add(a[i][j]);
-			}
-		} // ordena as strings
-		Collections.sort(ordenaTemp);
-		int k = 0;
-		// devolve as strings pro array original, em ordem.
-		for (int i = 0; i < a.length; i++) {
-			for (int j = 0; i < a[i].length; i++) {
-				a[i][j] = ordenaTemp.get(k++);
-			}
+	// método de teste criado para verificar a estutura do indiceReverso;
+	private void printArray() {
+		for (int i = 0; i < indiceReverso.size(); i++) {
+			System.out.println(indiceReverso.get(i).getPalavra() + " " + indiceReverso.get(i).getLinha() + " "
+					+ indiceReverso.get(i).getColuna());
 		}
 	}
-
-
 }

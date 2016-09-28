@@ -11,6 +11,7 @@ public String getNomeException(){
 	
 }
 public ArrayVazioException(String n){
-	super(n);
+	super();
+	this.n = n;
 }
 }
